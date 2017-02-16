@@ -3,19 +3,15 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', condition: false, anyArray: [1,2,3] });
+	// errors: req.session.errors will be empty at the beginning
+  res.render('index', { title: 'Form Validation', success: false, errors: req.session.errors });
+  // clear the errors after we send to the front-end
+  req.session.erros = null;
 });
 
-route.get('/test/:id', function(req, res, next) {
-	// we can access id via params.id because it was passed in via the url
-	// output is a variable that we can access via our templating engine
-	res.render('test', {output: req.params.id}); 
-});
-
-// submitting a form
-router.post('/test/submit', function(req, res, next) {
-	var id = req.body.id;
-	res.redirect('/test/' + id);
-});
+router.post('/submit', function(req, res, next) {
+	// Check validity 
+	
+})
 
 module.exports = router;

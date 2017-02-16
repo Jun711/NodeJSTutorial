@@ -8,6 +8,7 @@ var hbs = require('express-handlebars');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -23,8 +24,12 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// saveUninitialized means the session is saved even though it is uninitialized - default is false
+// resave meanas save the session after each req even though it is unmodified 
+app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
 
 app.use('/', index);
 app.use('/users', users);
