@@ -5,8 +5,8 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
 	// errors: req.session.errors will be empty at the beginning
   res.render('index', { title: 'Form Validation', success: req.session.success, errors: req.session.errors });
-  // clear the errors after we send to the front-end
-  req.session.erros = null;
+  // clear the errors and success after we send to the front-end
+  req.session.errors = null;
   req.session.success = null;
 });
 
