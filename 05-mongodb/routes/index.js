@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mongo = require('mongodb');
+var mongo = require('mongodb').MongoClient;
+var objectId = require('mongodb').ObjectID;
 var assert = require('assert');
 
 // mongodb server port
@@ -50,11 +51,44 @@ router.post('/insert', function(req, res, next) {
 });
 
 router.post('/update', function(req, res, next) {
+	let item = {
+		title: req.body.title,
+		content: req.body.content,
+		author: req.body.author
+	};
 
+	// it is id because the input has a name id
+	// <label for="id">ID</label>
+    // <input type="text" id="id" name="id">
+	let id = req.body.id;
+
+	mongo.connect(url, function(err, db) {
+		// check if we don't have an error
+		assert.equal(null, err);
+		
+		// strongly typed and thus needs ID to be an ObjectId object, set will update with the specified item
+		db.collection('user-data').updateOne({'_id': objectId(id)}, {$set: item}, function(err, result) {
+			assert.equal(null, err);
+			console.log('Item updated');
+			db.close();
+		});
+	});
 });
 
 router.post('/delete', function(req, res, next) {
+	let id = req.body.id;
 
+	mongo.connect(url, function(err, db) {
+		// check if we don't have an error
+		assert.equal(null, err);
+		
+		// strongly typed and thus needs ID to be an ObjectId object, set will update with the specified item
+		db.collection('user-data').deleteOne({'_id': objectId(id)}, function(err, result) {
+			assert.equal(null, err);
+			console.log('Item deleted');
+			db.close();
+		});
+	});
 });
 
 module.exports = router;
